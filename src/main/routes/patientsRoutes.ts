@@ -5,43 +5,38 @@ const prisma = new PrismaClient()
 
 export default (router: Router): void => {
   router.get('/patients', async (req, res) => {
-    const patientsProblems = await prisma.patient.findMany({
+    const patientProblemTable = await prisma.patient.findMany({
       include: {
         patientProblems: true,
       },
     })
 
-    if (!patientsProblems) {
-      return res.status(404).send()
-    }
+    const patient = await prisma.patient.findMany()
 
     const problems = await prisma.problem.findMany()
-    const patients = await prisma.patient.findMany()
 
-    const patientsProblemsId = patientsProblems.map((patientProblem) =>
-      patientProblem.patientProblems.map(
-        (patientProblem) => patientProblem.problemId
-      )
-    )
-
-    const patientsWithProblems = patients.map((patient) => {
-      const patientProblemId = patientsProblemsId.find(
-        (patientProblemId) => patientProblemId[0] === patient.id
+    const patientProblems = patientProblemTable.map((patient) => {
+      const patientProblemId = patient.patientProblems.map(
+        (patientProblemTable) => patientProblemTable.problemId
       )
 
-      const problem = problems.filter((problem) =>
-        patientProblemId?.includes(problem.id)
-      )
+      const problem = problems.filter((problem) => {
+        return patientProblemId.includes(problem.id)
+      })
 
-      const patientWithProblem = {
-        ...patient,
+      return {
         problem,
       }
-
-      return patientWithProblem
     })
 
-    return res.send(patientsWithProblems)
+    const patientWithProblem = patient.map((patient, index) => {
+      return {
+        ...patient,
+        problem: patientProblems[index].problem,
+      }
+    })
+
+    return res.send(patientWithProblem)
   })
 
   router.get(`/patients/:id`, async (req, res) => {
@@ -83,13 +78,18 @@ export default (router: Router): void => {
   })
 
   router.post('/patients', async (req, res) => {
-    const { name, email, medicalRecord } = req.body
+    const {
+      name,
+      email,
+      medicalRecord,
+      patientProblems: [{ problemId }],
+    } = req.body
 
-    const patientExists = await prisma.patient.findUnique({
+    const emailExists = await prisma.patient.findUnique({
       where: { email },
     })
 
-    if (patientExists) {
+    if (emailExists) {
       return res.status(409).send({ message: 'Email already in use' })
     }
 
@@ -98,10 +98,23 @@ export default (router: Router): void => {
         name,
         email,
         medicalRecord,
+        patientProblems: {
+          create: {
+            problemId,
+          },
+        },
         createdAt: new Date(),
       },
     })
-    return res.status(201).send(patient)
+
+    const patientProblem = await prisma.patientProblem.create({
+      data: {
+        patientId: patient.id,
+        problemId,
+      },
+    })
+
+    return res.status(201).send({ patient, patientProblem })
   })
 
   router.delete('/patients/:id', async (req, res) => {

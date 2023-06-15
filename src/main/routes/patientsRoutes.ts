@@ -32,7 +32,7 @@ export default (router: Router): void => {
     const patientWithProblem = patient.map((patient, index) => {
       return {
         ...patient,
-        problem: patientProblems[index].problem,
+        problems: patientProblems[index].problem,
       }
     })
 
@@ -78,12 +78,7 @@ export default (router: Router): void => {
   })
 
   router.post('/patients', async (req, res) => {
-    const {
-      name,
-      email,
-      medicalRecord,
-      patientProblems: [{ problemId }],
-    } = req.body
+    const { name, email, medicalRecord, patientProblems } = req.body
 
     const emailExists = await prisma.patient.findUnique({
       where: { email },
@@ -98,23 +93,25 @@ export default (router: Router): void => {
         name,
         email,
         medicalRecord,
-        patientProblems: {
-          create: {
-            problemId,
-          },
-        },
         createdAt: new Date(),
+        patientProblems: {
+          create: patientProblems.map((problem: { problemId: any }) => ({
+            problemId: problem.problemId,
+          })),
+        },
       },
     })
 
-    const patientProblem = await prisma.patientProblem.create({
-      data: {
-        patientId: patient.id,
-        problemId,
-      },
-    })
+    for (const problem of patientProblems) {
+      await prisma.patientProblem.create({
+        data: {
+          patientId: patient.id,
+          problemId: problem.problemId,
+        },
+      })
+    }
 
-    return res.status(201).send({ patient, patientProblem })
+    return res.status(201).send(patient)
   })
 
   router.delete('/patients/:id', async (req, res) => {

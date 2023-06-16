@@ -4,7 +4,7 @@ export interface IProblem {
   id: number
   code: string
   description: string
-  patientProblems: IPatientProblems[]
+  patientProblems?: IPatientProblems[]
   createdAt: Date
   updatedAt: Date
 }

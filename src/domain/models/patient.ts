@@ -6,7 +6,7 @@ export interface IPatient {
   name: string
   email: string
   medicalRecord: string
-  patientProblems: IPatientProblems[]
+  patientProblems?: IPatientProblems[]
   createdAt: Date
   updatedAt: Date
 }

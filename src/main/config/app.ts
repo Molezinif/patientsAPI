@@ -1,5 +1,5 @@
 import express from 'express'
-import { bodyParser } from '../middlewares/bodyParser'
+import { bodyParser } from '@/main/middlewares'
 import setupRoutes from './routes'
 
 const app = express()

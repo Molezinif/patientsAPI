@@ -1,7 +1,9 @@
-import { FindPatientsRepository } from '@/data'
+import { FindPatientsRepository, CreatePatientRepository } from '@/data'
 import prisma from '@/infra/db/prisma/helpers/client'
 
-export class PatientPrismaRepository implements FindPatientsRepository {
+export class PatientPrismaRepository
+  implements FindPatientsRepository, CreatePatientRepository
+{
   async find(): Promise<FindPatientsRepository.Result> {
     const patientProblemTable = await prisma.patient.findMany({
       include: {
@@ -35,5 +37,50 @@ export class PatientPrismaRepository implements FindPatientsRepository {
     })
 
     return patientWithProblem
+  }
+
+  async create(
+    request: CreatePatientRepository.Request
+  ): Promise<CreatePatientRepository.Result> {
+    const { name, email, medicalRecord, patientProblems } = request.body
+
+    const emailExists = await prisma.patient.findUnique({
+      where: { email },
+    })
+
+    if (emailExists) {
+      return null
+    }
+
+    const patient = await prisma.patient.create({
+      data: {
+        name,
+        email,
+        medicalRecord,
+        createdAt: new Date(),
+        patientProblems: {
+          create: patientProblems?.map((problem: { problemId: any }) => ({
+            problemId: problem.problemId,
+          })),
+        },
+      },
+    })
+
+    if (!patient) {
+      return null
+    }
+
+    if (!patientProblems) return patient
+
+    for (const problem of patientProblems) {
+      await prisma.patientProblem.create({
+        data: {
+          patientId: patient.id,
+          problemId: problem.problemId,
+        },
+      })
+    }
+
+    return patient
   }
 }

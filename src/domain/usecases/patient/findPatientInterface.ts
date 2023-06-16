@@ -1,4 +1,4 @@
-import { IPatient, IProblem } from '@/domain/models'
+import { IProblem } from '@/domain/models'
 
 export namespace FindPatientsInterface {
   export type Params = {}

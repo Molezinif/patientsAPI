@@ -1,7 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 import { Router } from 'express'
 import { adaptRoute } from '@/main/adapters'
-import { makeFindPatientsController } from '@/main/factories'
+import {
+  makeFindPatientsController,
+  makeCreatePatientController,
+} from '@/main/factories'
 
 const prisma = new PrismaClient()
 
@@ -46,42 +49,7 @@ export default (router: Router): void => {
     return res.send(patientWithProblem)
   })
 
-  router.post('/patients', async (req, res) => {
-    const { name, email, medicalRecord, patientProblems } = req.body
-
-    const emailExists = await prisma.patient.findUnique({
-      where: { email },
-    })
-
-    if (emailExists) {
-      return res.status(409).send({ message: 'Email already in use' })
-    }
-
-    const patient = await prisma.patient.create({
-      data: {
-        name,
-        email,
-        medicalRecord,
-        createdAt: new Date(),
-        patientProblems: {
-          create: patientProblems.map((problem: { problemId: any }) => ({
-            problemId: problem.problemId,
-          })),
-        },
-      },
-    })
-
-    for (const problem of patientProblems) {
-      await prisma.patientProblem.create({
-        data: {
-          patientId: patient.id,
-          problemId: problem.problemId,
-        },
-      })
-    }
-
-    return res.status(201).send(patient)
-  })
+  router.post('/patients', adaptRoute(makeCreatePatientController()))
 
   router.delete('/patients/:id', async (req, res) => {
     const { id } = req.params

@@ -28,8 +28,6 @@ export class ProblemPrismaRepository
   async add(
     params: AddProblemInterface.Params
   ): Promise<AddProblemInterface.Result> {
-    console.log(params)
-
     const result = await prisma.problem.create({
       data: {
         code: params.code,

@@ -1,12 +1,20 @@
-import { IPatient } from '@/domain/models'
+import { IPatient, IProblem } from '@/domain/models'
 
-export namespace FindPatient {
-  export type Params = {
-    id: string
-  }
-  export type Result = IPatient
+export namespace FindPatientsInterface {
+  export type Params = {}
+  export type Result = {
+    id: number
+    email: string
+    name: string
+    medicalRecord: string
+    createdAt: Date
+    updatedAt: Date
+    problems: IProblem[]
+  }[]
 }
 
-export interface IFindPatient {
-  find: (patient: FindPatient.Params) => Promise<FindPatient.Result>
+export interface FindPatientsInterface {
+  find: (
+    patient: FindPatientsInterface.Params
+  ) => Promise<FindPatientsInterface.Result>
 }

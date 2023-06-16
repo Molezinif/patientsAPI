@@ -1,43 +1,12 @@
 import { PrismaClient } from '@prisma/client'
 import { Router } from 'express'
+import { adaptRoute } from '@/main/adapters'
+import { makeFindPatientsController } from '@/main/factories'
 
 const prisma = new PrismaClient()
 
 export default (router: Router): void => {
-  router.get('/patients', async (req, res) => {
-    const patientProblemTable = await prisma.patient.findMany({
-      include: {
-        patientProblems: true,
-      },
-    })
-
-    const patient = await prisma.patient.findMany()
-
-    const problems = await prisma.problem.findMany()
-
-    const patientProblems = patientProblemTable.map((patient) => {
-      const patientProblemId = patient.patientProblems.map(
-        (patientProblemTable) => patientProblemTable.problemId
-      )
-
-      const problem = problems.filter((problem) => {
-        return patientProblemId.includes(problem.id)
-      })
-
-      return {
-        problem,
-      }
-    })
-
-    const patientWithProblem = patient.map((patient, index) => {
-      return {
-        ...patient,
-        problems: patientProblems[index].problem,
-      }
-    })
-
-    return res.send(patientWithProblem)
-  })
+  router.get('/patients', adaptRoute(makeFindPatientsController()))
 
   router.get(`/patients/:id`, async (req, res) => {
     const { id } = req.params

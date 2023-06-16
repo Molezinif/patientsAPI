@@ -1,1 +1,1 @@
-export * from './findProblemRepositoryControllerFactory'
+export * from './findProblemsRepositoryControllerFactory'

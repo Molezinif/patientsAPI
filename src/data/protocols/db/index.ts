@@ -1,2 +1,2 @@
-export * from './problems'
 export * from './patients'
+export * from './problems'

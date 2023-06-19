@@ -6,7 +6,6 @@ export class DbDeletePatient implements DeletePatientInterface {
   async delete(
     request: DeletePatientRepository.Params
   ): Promise<DeletePatientRepository.Result> {
-    console.log('DbDeletePatient.delete', request)
     return await this.repository.delete(request)
   }
 }

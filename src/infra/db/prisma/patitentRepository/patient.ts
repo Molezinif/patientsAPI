@@ -74,7 +74,6 @@ export class PatientPrismaRepository
   async delete(
     params: DeletePatientRepository.Params
   ): Promise<DeletePatientRepository.Result> {
-    console.log('DeletePatientRepository', params)
     await prisma.patientProblem.deleteMany({
       where: { id: Number(params.id) },
     })

@@ -44,7 +44,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('DbFindPatients', () => {
+describe('DbAddPatients', () => {
   test('Should call createPatientsRepository with correct values', async () => {
     const { sut, patientRepositoryStub } = makeSut()
     const createSpy = jest.spyOn(patientRepositoryStub, 'create')

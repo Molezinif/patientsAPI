@@ -32,7 +32,7 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbDeletePatients', () => {
-  test('Should call DeletePatientsRepository with correct values', async () => {
+  test('Should call dbDeletePatients with correct values', async () => {
     const { sut, patientRepositoryStub } = makeSut()
     const deleteManySpy = jest.spyOn(patientRepositoryStub, 'delete')
     await sut.delete({

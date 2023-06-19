@@ -14,7 +14,6 @@ module.exports = {
     '!<rootDir>/src/**/*.protocols.ts',
     '!<rootDir>/src/domain/usecases/**'
   ],
-  globals: { 'ts-jest': { isolatedModules: true } },
   coverageDirectory: 'coverage',
   transform: {
     '.+\\.ts$': ['ts-jest',

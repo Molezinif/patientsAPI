@@ -17,12 +17,18 @@ export class ProblemPrismaRepository
           id: params.id,
         },
       })
-      return result
+      return {
+        statusCode: 200,
+        body: result,
+      }
     }
 
     const result = await prisma.problem.findMany()
 
-    return result
+    return {
+      statusCode: 200,
+      body: result,
+    }
   }
 
   async add(
@@ -38,11 +44,8 @@ export class ProblemPrismaRepository
     if (!result) throw new Error('Problem not created')
 
     return {
-      id: result.id,
-      code: result.code,
-      description: result.description,
-      createdAt: result.createdAt,
-      updatedAt: result.updatedAt,
+      statusCode: 201,
+      body: result,
     }
   }
 }

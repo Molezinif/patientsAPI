@@ -36,8 +36,8 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('DbFindPatients', () => {
-  test('Should call dbFindUniquePatient with correct values', async () => {
+describe('DbUpdatePatients', () => {
+  test('Should call dbUpdatePatients with correct values', async () => {
     const mockParams = {
       params: {
         id: 1,
@@ -48,8 +48,8 @@ describe('DbFindPatients', () => {
       },
     }
     const { sut, patientRepositoryStub } = makeSut()
-    const findManySpy = jest.spyOn(patientRepositoryStub, 'update')
+    const updateSpy = jest.spyOn(patientRepositoryStub, 'update')
     await sut.update(mockParams)
-    expect(findManySpy).toHaveBeenCalledWith(mockParams)
+    expect(updateSpy).toHaveBeenCalledWith(mockParams)
   })
 })

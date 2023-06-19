@@ -55,11 +55,11 @@ const makeSut = (): SutTypes => {
 describe('DbFindPatients', () => {
   test('Should call dbFindUniquePatient with correct values', async () => {
     const { sut, patientRepositoryStub } = makeSut()
-    const findManySpy = jest.spyOn(patientRepositoryStub, 'findUnique')
+    const findUniqueSpy = jest.spyOn(patientRepositoryStub, 'findUnique')
     await sut.findUnique({
       id: 1,
     })
-    expect(findManySpy).toHaveBeenCalledWith({
+    expect(findUniqueSpy).toHaveBeenCalledWith({
       id: 1,
     })
   })

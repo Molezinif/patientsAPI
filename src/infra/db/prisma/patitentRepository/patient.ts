@@ -93,33 +93,46 @@ export class PatientPrismaRepository
   async create(
     request: CreatePatientRepository.Params
   ): Promise<CreatePatientRepository.Result> {
-    const { name, email, medicalRecord } = request.body
+    const { name, email, medicalRecord, patientProblems } = request.body
 
-    if (!name || !email || !medicalRecord) {
-      throw new Error('Missing required fields')
+    const emailExists = await prisma.patient.findUnique({
+      where: { email },
+    })
+
+    if (emailExists) {
+      return null
     }
 
-    try {
-      const createdPatient = await prisma.patient.create({
-        data: {
-          name: name,
-          email: email,
-          medicalRecord: medicalRecord,
-        },
-      })
+    console.log(patientProblems)
 
-      return createdPatient
-    } catch (error) {
-      console.error(error)
-      throw new Error('Failed to create patient')
+    const patient = await prisma.patient.create({
+      data: {
+        name,
+        email,
+        medicalRecord,
+        createdAt: new Date(),
+      },
+    })
+
+    if (patientProblems) {
+      for (const problem of patientProblems) {
+        await prisma.patientProblem.create({
+          data: {
+            patientId: patient.id,
+            problemId: problem.problemId,
+          },
+        })
+      }
     }
+
+    return patient
   }
 
   async delete(
     params: DeletePatientRepository.Params
   ): Promise<DeletePatientRepository.Result> {
     await prisma.patientProblem.deleteMany({
-      where: { id: Number(params.id) },
+      where: { patientId: Number(params.id) },
     })
 
     await prisma.patient.delete({

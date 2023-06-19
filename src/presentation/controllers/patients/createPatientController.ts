@@ -6,12 +6,13 @@ export class CreatePatientController implements Controller {
   constructor(private readonly createPatient: CreatePatientInterface) {}
 
   async handle(request: CreatePatientController.Request) {
-    const { name, email, medicalRecord } = request.body
+    const { name, email, medicalRecord, patientProblems } = request.body
     const patient = await this.createPatient.create({
       body: {
         name,
         email,
         medicalRecord,
+        patientProblems,
       },
     })
     return { statusCode: 200, body: patient }

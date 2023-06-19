@@ -2,6 +2,7 @@ import {
   FindPatientsRepository,
   CreatePatientRepository,
   DeletePatientRepository,
+  UpdatePatientRepository,
 } from '@/data'
 import prisma from '@/infra/db/prisma/helpers/client'
 
@@ -9,7 +10,8 @@ export class PatientPrismaRepository
   implements
     FindPatientsRepository,
     CreatePatientRepository,
-    DeletePatientRepository
+    DeletePatientRepository,
+    UpdatePatientRepository
 {
   async find(): Promise<FindPatientsRepository.Result> {
     const patientProblemTable = await prisma.patient.findMany({
@@ -82,6 +84,33 @@ export class PatientPrismaRepository
       where: { id: Number(params.id) },
     })
 
+    return true
+  }
+
+  async update(
+    request: UpdatePatientRepository.Params
+  ): Promise<UpdatePatientRepository.Result> {
+    const { id } = request.params
+    const { name, email } = request.body
+
+    const patientExists = await prisma.patient.findUnique({
+      where: { id: Number(id) },
+    })
+
+    if (!patientExists) {
+      console.log('Patient not found')
+      return false
+    }
+
+    const patient = await prisma.patient.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        name,
+        email,
+      },
+    })
     return true
   }
 }

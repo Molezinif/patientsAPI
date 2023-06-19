@@ -1,11 +1,18 @@
-export namespace UpdatePatient {
+export namespace UpdatePatientInterface {
   export type Params = {
-    name?: string
-    email?: string
+    params: {
+      id: number
+    }
+    body: {
+      name?: string
+      email?: string
+    }
   }
   export type Result = boolean
 }
 
-export interface IUpdatePatient {
-  update: (patient: UpdatePatient.Params) => Promise<UpdatePatient.Result>
+export interface UpdatePatientInterface {
+  update: (
+    patient: UpdatePatientInterface.Params
+  ) => Promise<UpdatePatientInterface.Result>
 }

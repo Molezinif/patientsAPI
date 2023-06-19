@@ -6,13 +6,14 @@ export class UpdatePatientController implements Controller {
   constructor(private readonly UpdatePatient: UpdatePatientInterface) {}
 
   async handle(request: UpdatePatientController.Request) {
-    const { name, email } = request.body
+    const { name, email, patientProblems } = request.body
     const { id } = request.params
 
     const patient = await this.UpdatePatient.update({
       body: {
         name,
         email,
+        patientProblems,
       },
       params: {
         id: Number(id),
@@ -30,6 +31,9 @@ export namespace UpdatePatientController {
     body: {
       name?: string
       email?: string
+      patientProblems?: {
+        problemId: number
+      }[]
     }
   }
 }

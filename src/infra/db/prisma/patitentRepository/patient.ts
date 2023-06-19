@@ -146,11 +146,28 @@ export class PatientPrismaRepository
     request: UpdatePatientRepository.Params
   ): Promise<UpdatePatientRepository.Result> {
     const { id } = request.params
-    const { name, email } = request.body
+    const { name, email, patientProblems } = request.body
 
     const patientExists = await prisma.patient.findUnique({
       where: { id: Number(id) },
     })
+
+    const patientProblemDoesNotExist = await prisma.patientProblem.findMany({
+      where: {
+        patientId: Number(id),
+      },
+    })
+
+    if (patientProblemDoesNotExist && patientProblems) {
+      for (const problem of patientProblems) {
+        await prisma.patientProblem.create({
+          data: {
+            patientId: Number(id),
+            problemId: problem.problemId,
+          },
+        })
+      }
+    }
 
     if (!patientExists) {
       console.log('Patient not found')

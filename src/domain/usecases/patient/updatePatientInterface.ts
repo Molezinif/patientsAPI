@@ -1,3 +1,5 @@
+import { IPatientProblems, IProblem } from '@/domain/models'
+
 export namespace UpdatePatientInterface {
   export type Params = {
     params: {
@@ -6,6 +8,9 @@ export namespace UpdatePatientInterface {
     body: {
       name?: string
       email?: string
+      patientProblems?: {
+        problemId: number
+      }[]
     }
   }
   export type Result = boolean

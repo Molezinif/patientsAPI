@@ -1,7 +1,7 @@
 import { IPatientProblems } from '@/domain/models'
 
 export namespace CreatePatientInterface {
-  export type Request = {
+  export type Params = {
     body: {
       name: string
       email: string
@@ -22,6 +22,6 @@ export namespace CreatePatientInterface {
 
 export interface CreatePatientInterface {
   create: (
-    params: CreatePatientInterface.Request
+    params: CreatePatientInterface.Params
   ) => Promise<CreatePatientInterface.Result>
 }

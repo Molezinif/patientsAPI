@@ -47,7 +47,7 @@ export class PatientPrismaRepository
   }
 
   async create(
-    request: CreatePatientRepository.Request
+    request: CreatePatientRepository.Params
   ): Promise<CreatePatientRepository.Result> {
     const { name, email, medicalRecord } = request.body
 

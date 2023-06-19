@@ -5,7 +5,7 @@ export class DbCreatePatient implements CreatePatientInterface {
     private readonly CreatePatientRepository: CreatePatientInterface
   ) {}
   async create(
-    params: CreatePatientInterface.Request
+    params: CreatePatientInterface.Params
   ): Promise<CreatePatientInterface.Result> {
     const result = await this.CreatePatientRepository.create(params)
     return result

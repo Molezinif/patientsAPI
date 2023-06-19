@@ -1,4 +1,5 @@
 module.exports = {
+  roots: ['<rootDir>/tests'],
   preset: 'ts-jest',
   testEnvironment: 'node',
   moduleNameMapper: {
@@ -13,5 +14,13 @@ module.exports = {
     '!<rootDir>/src/**/*.protocols.ts',
     '!<rootDir>/src/domain/usecases/**'
   ],
-  coverageDirectory: 'coverage'
+  globals: { 'ts-jest': { isolatedModules: true } },
+  coverageDirectory: 'coverage',
+  transform: {
+    '.+\\.ts$': ['ts-jest',
+      {
+        isolatedModules: true
+      }
+    ]
+  }
 }

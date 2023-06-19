@@ -5,10 +5,13 @@ export class DeletePatientController implements Controller {
   constructor(private readonly DeletePatient: DeletePatientInterface) {}
 
   async handle(request: DeletePatientController.Request) {
-    await this.DeletePatient.delete({
+    const deletePatient = await this.DeletePatient.delete({
       id: request.params.id,
     })
-    return { statusCode: 200, body: 'Patient deleted' }
+    return {
+      statusCode: deletePatient.statusCode,
+      body: deletePatient.body,
+    }
   }
 }
 

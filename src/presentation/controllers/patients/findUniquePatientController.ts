@@ -6,10 +6,10 @@ export class FindUniquePatientController implements Controller {
 
   async handle(request: FindUniquePatientController.Request) {
     const { id } = request.params
-    const patients = await this.findPatient.findUnique({
+    const patient = await this.findPatient.findUnique({
       id: Number(id),
     })
-    return { statusCode: 200, body: patients }
+    return { statusCode: patient.statusCode, body: patient.body }
   }
 }
 

@@ -6,7 +6,7 @@ export class FindPatientsController implements Controller {
 
   async handle(request: FindPatientsController.Request) {
     const patients = await this.findPatients.findMany({})
-    return { statusCode: 200, body: patients }
+    return { statusCode: patients.statusCode, body: patients.body }
   }
 }
 

@@ -1,8 +1,10 @@
+import { HttpResponse } from '@/presentation/protocols'
+
 export namespace DeletePatientInterface {
   export type Params = {
     id: number
   }
-  export type Result = Boolean
+  export type Result = HttpResponse
 }
 
 export interface DeletePatientInterface {

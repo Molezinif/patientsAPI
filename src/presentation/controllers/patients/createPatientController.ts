@@ -15,7 +15,8 @@ export class CreatePatientController implements Controller {
         patientProblems,
       },
     })
-    return { statusCode: 201, body: patient }
+
+    return { statusCode: patient.statusCode, body: patient.body }
   }
 }
 

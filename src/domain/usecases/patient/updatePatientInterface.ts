@@ -1,4 +1,5 @@
 import { IPatientProblems, IProblem } from '@/domain/models'
+import { HttpResponse } from '@/presentation/protocols'
 
 export namespace UpdatePatientInterface {
   export type Params = {
@@ -13,7 +14,7 @@ export namespace UpdatePatientInterface {
       }[]
     }
   }
-  export type Result = boolean
+  export type Result = HttpResponse
 }
 
 export interface UpdatePatientInterface {

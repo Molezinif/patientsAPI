@@ -19,7 +19,7 @@ export class UpdatePatientController implements Controller {
         id: Number(id),
       },
     })
-    return { statusCode: 200, body: patient }
+    return { statusCode: patient.statusCode, body: patient.body }
   }
 }
 

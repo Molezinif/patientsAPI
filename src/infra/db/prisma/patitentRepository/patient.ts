@@ -47,7 +47,17 @@ export class PatientPrismaRepository
       }
     })
 
-    return patientWithProblem
+    if (!patientWithProblem || patientWithProblem.length === 0) {
+      return {
+        statusCode: 200,
+        body: [],
+      }
+    }
+
+    return {
+      statusCode: 200,
+      body: patientWithProblem,
+    }
   }
 
   async findUnique(
@@ -81,13 +91,19 @@ export class PatientPrismaRepository
     const patientWithProblem = {
       ...patient,
       problems: problems,
-    } as FindPatientUniqueRepository.Result
+    } as FindPatientUniqueRepository.Params
 
     if (!patient) {
-      return null
+      return {
+        statusCode: 404,
+        body: 'Patient not found',
+      }
     }
 
-    return patientWithProblem
+    return {
+      statusCode: 200,
+      body: patientWithProblem,
+    }
   }
 
   async create(
@@ -100,10 +116,18 @@ export class PatientPrismaRepository
     })
 
     if (emailExists) {
-      return null
+      return {
+        statusCode: 400,
+        body: 'Email already exists',
+      }
     }
 
-    console.log(patientProblems)
+    if (!name || !email || !medicalRecord) {
+      return {
+        statusCode: 400,
+        body: 'Missing param: name, email or medicalRecord',
+      }
+    }
 
     const patient = await prisma.patient.create({
       data: {
@@ -125,12 +149,26 @@ export class PatientPrismaRepository
       }
     }
 
-    return patient
+    return {
+      statusCode: 201,
+      body: patient,
+    }
   }
 
   async delete(
     params: DeletePatientRepository.Params
   ): Promise<DeletePatientRepository.Result> {
+    const patientExists = await prisma.patient.findUnique({
+      where: { id: Number(params.id) },
+    })
+
+    if (!patientExists) {
+      return {
+        statusCode: 400,
+        body: 'Patient does not exist',
+      }
+    }
+
     await prisma.patientProblem.deleteMany({
       where: { patientId: Number(params.id) },
     })
@@ -139,7 +177,12 @@ export class PatientPrismaRepository
       where: { id: Number(params.id) },
     })
 
-    return true
+    return {
+      statusCode: 200,
+      body: {
+        message: 'Patient deleted successfully',
+      },
+    }
   }
 
   async update(
@@ -171,7 +214,12 @@ export class PatientPrismaRepository
 
     if (!patientExists) {
       console.log('Patient not found')
-      return false
+      return {
+        statusCode: 404,
+        body: {
+          message: 'Patient not found',
+        },
+      }
     }
 
     const patient = await prisma.patient.update({
@@ -183,6 +231,9 @@ export class PatientPrismaRepository
         email,
       },
     })
-    return true
+    return {
+      statusCode: 200,
+      body: patient,
+    }
   }
 }

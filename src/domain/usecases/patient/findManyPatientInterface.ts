@@ -1,16 +1,9 @@
 import { IProblem } from '@/domain/models'
+import { HttpResponse } from '@/presentation/protocols'
 
 export namespace FindPatientsInterface {
   export type Params = {}
-  export type Result = {
-    id: number
-    email: string
-    name: string
-    medicalRecord: string
-    createdAt: Date
-    updatedAt: Date
-    problems: IProblem[]
-  }[]
+  export type Result = HttpResponse
 }
 
 export interface FindPatientsInterface {

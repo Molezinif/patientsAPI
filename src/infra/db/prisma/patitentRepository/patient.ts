@@ -1,8 +1,15 @@
-import { FindPatientsRepository, CreatePatientRepository } from '@/data'
+import {
+  FindPatientsRepository,
+  CreatePatientRepository,
+  DeletePatientRepository,
+} from '@/data'
 import prisma from '@/infra/db/prisma/helpers/client'
 
 export class PatientPrismaRepository
-  implements FindPatientsRepository, CreatePatientRepository
+  implements
+    FindPatientsRepository,
+    CreatePatientRepository,
+    DeletePatientRepository
 {
   async find(): Promise<FindPatientsRepository.Result> {
     const patientProblemTable = await prisma.patient.findMany({
@@ -42,45 +49,40 @@ export class PatientPrismaRepository
   async create(
     request: CreatePatientRepository.Request
   ): Promise<CreatePatientRepository.Result> {
-    const { name, email, medicalRecord, patientProblems } = request.body
+    const { name, email, medicalRecord } = request.body
 
-    const emailExists = await prisma.patient.findUnique({
-      where: { email },
-    })
-
-    if (emailExists) {
-      return null
+    if (!name || !email || !medicalRecord) {
+      throw new Error('Missing required fields')
     }
 
-    const patient = await prisma.patient.create({
-      data: {
-        name,
-        email,
-        medicalRecord,
-        createdAt: new Date(),
-        patientProblems: {
-          create: patientProblems?.map((problem: { problemId: any }) => ({
-            problemId: problem.problemId,
-          })),
-        },
-      },
-    })
-
-    if (!patient) {
-      return null
-    }
-
-    if (!patientProblems) return patient
-
-    for (const problem of patientProblems) {
-      await prisma.patientProblem.create({
+    try {
+      const createdPatient = await prisma.patient.create({
         data: {
-          patientId: patient.id,
-          problemId: problem.problemId,
+          name: name,
+          email: email,
+          medicalRecord: medicalRecord,
         },
       })
-    }
 
-    return patient
+      return createdPatient
+    } catch (error) {
+      console.error(error)
+      throw new Error('Failed to create patient')
+    }
+  }
+
+  async delete(
+    params: DeletePatientRepository.Params
+  ): Promise<DeletePatientRepository.Result> {
+    console.log('DeletePatientRepository', params)
+    await prisma.patientProblem.deleteMany({
+      where: { id: Number(params.id) },
+    })
+
+    await prisma.patient.delete({
+      where: { id: Number(params.id) },
+    })
+
+    return true
   }
 }

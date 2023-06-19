@@ -4,6 +4,7 @@ import { adaptRoute } from '@/main/adapters'
 import {
   makeFindPatientsController,
   makeCreatePatientController,
+  makeDeletePatientController,
 } from '@/main/factories'
 
 const prisma = new PrismaClient()
@@ -51,29 +52,7 @@ export default (router: Router): void => {
 
   router.post('/patients', adaptRoute(makeCreatePatientController()))
 
-  router.delete('/patients/:id', async (req, res) => {
-    const { id } = req.params
-
-    const patientExists = await prisma.patient.findUnique({
-      where: { id: Number(id) },
-    })
-
-    if (!patientExists) {
-      return res.status(404).send()
-    }
-
-    await prisma.patientProblem.deleteMany({
-      where: { patientId: Number(id) },
-    })
-
-    await prisma.patient.delete({
-      where: {
-        id: Number(id),
-      },
-    })
-
-    return res.status(204).send()
-  })
+  router.delete('/patients/:id', adaptRoute(makeDeletePatientController()))
 
   router.put('/patients/:id', async (req, res) => {
     const { id } = req.params

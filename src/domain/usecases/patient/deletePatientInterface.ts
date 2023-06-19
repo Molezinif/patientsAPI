@@ -1,10 +1,12 @@
-export namespace DeletePatient {
+export namespace DeletePatientInterface {
   export type Params = {
-    id: string
+    id: number
   }
-  export type Result = boolean
+  export type Result = Boolean
 }
 
-export interface IDeletePatient {
-  delete: (params: DeletePatient.Params) => Promise<DeletePatient.Result>
+export interface DeletePatientInterface {
+  delete(
+    params: DeletePatientInterface.Params
+  ): Promise<DeletePatientInterface.Result>
 }

@@ -13,7 +13,7 @@ export class PatientPrismaRepository
     DeletePatientRepository,
     UpdatePatientRepository
 {
-  async find(): Promise<FindPatientsRepository.Result> {
+  async findMany(): Promise<FindPatientsRepository.Result> {
     const patientProblemTable = await prisma.patient.findMany({
       include: {
         patientProblems: true,

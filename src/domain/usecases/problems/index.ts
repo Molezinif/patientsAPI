@@ -1,2 +1,2 @@
 export * from './addProblemInterface'
-export * from './findProblemsInterface'
+export * from './findManyProblemsInterface'

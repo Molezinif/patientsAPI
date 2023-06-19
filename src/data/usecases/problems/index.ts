@@ -1,2 +1,2 @@
 export * from './dbAddProblems'
-export * from './dbFindProblems'
+export * from './dbFindManyProblems'

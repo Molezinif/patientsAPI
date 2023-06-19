@@ -8,7 +8,7 @@ export namespace FindProblemsInterface {
 }
 
 export interface FindProblemsInterface {
-  find: (
+  findMany: (
     problem: FindProblemsInterface.Params
   ) => Promise<FindProblemsInterface.Result>
 }

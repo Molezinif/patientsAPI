@@ -1,4 +1,4 @@
 export * from './createPatientInterface'
 export * from './deletePatientInterface'
-export * from './findPatientInterface'
+export * from './findManyPatientInterface'
 export * from './updatePatientInterface'

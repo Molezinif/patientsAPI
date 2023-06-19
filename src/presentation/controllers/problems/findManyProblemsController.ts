@@ -6,7 +6,7 @@ export class FindProblemsController implements Controller {
 
   async handle(request: FindProblemsController.Request) {
     const { id } = request
-    const problems = await this.findProblems.find({
+    const problems = await this.findProblems.findMany({
       id: id ? Number(id) : undefined,
     })
     return { statusCode: 200, body: problems }

@@ -8,7 +8,7 @@ import prisma from '@/infra/db/prisma/helpers/client'
 export class ProblemPrismaRepository
   implements FindProblemsRepository, AddProblemRepository
 {
-  async find(
+  async findMany(
     params: FindProblemsInterface.Params
   ): Promise<FindProblemsInterface.Result> {
     if (params.id) {

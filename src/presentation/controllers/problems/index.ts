@@ -1,2 +1,2 @@
-export * from './findProblemsController'
+export * from './findManyProblemsController'
 export * from './addProblemController'

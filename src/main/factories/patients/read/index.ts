@@ -1,1 +1,1 @@
-export * from './findPatientsRepositoryControllerFactory'
+export * from './findManyPatientsRepositoryControllerFactory'

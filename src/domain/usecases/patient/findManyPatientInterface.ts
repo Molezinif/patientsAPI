@@ -14,7 +14,7 @@ export namespace FindPatientsInterface {
 }
 
 export interface FindPatientsInterface {
-  find: (
+  findMany: (
     patient: FindPatientsInterface.Params
   ) => Promise<FindPatientsInterface.Result>
 }

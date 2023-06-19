@@ -3,12 +3,14 @@ import {
   CreatePatientRepository,
   DeletePatientRepository,
   UpdatePatientRepository,
+  FindPatientUniqueRepository,
 } from '@/data'
 import prisma from '@/infra/db/prisma/helpers/client'
 
 export class PatientPrismaRepository
   implements
     FindPatientsRepository,
+    FindPatientUniqueRepository,
     CreatePatientRepository,
     DeletePatientRepository,
     UpdatePatientRepository
@@ -44,6 +46,46 @@ export class PatientPrismaRepository
         problems: patientProblems[index].problem,
       }
     })
+
+    return patientWithProblem
+  }
+
+  async findUnique(
+    request: FindPatientUniqueRepository.Params
+  ): Promise<FindPatientUniqueRepository.Result> {
+    const { id } = request
+
+    const patientProblemTable = await prisma.patient.findUnique({
+      where: { id: Number(id) },
+      include: {
+        patientProblems: true,
+      },
+    })
+
+    const patientProblemId = patientProblemTable?.patientProblems.map(
+      (patientProblemTable) => patientProblemTable.problemId
+    )
+
+    const problems = await prisma.problem.findMany({
+      where: {
+        id: {
+          in: patientProblemId,
+        },
+      },
+    })
+
+    const patient = await prisma.patient.findUnique({
+      where: { id: Number(id) },
+    })
+
+    const patientWithProblem = {
+      ...patient,
+      problems: problems,
+    } as FindPatientUniqueRepository.Result
+
+    if (!patient) {
+      return null
+    }
 
     return patientWithProblem
   }

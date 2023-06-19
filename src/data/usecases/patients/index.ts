@@ -1,4 +1,5 @@
 export * from './dbFindManyPatients'
+export * from './dbFindUniquePatient'
 export * from './dbCreatePatient'
 export * from './dbDeletePatient'
 export * from './dbUpdatePatient'

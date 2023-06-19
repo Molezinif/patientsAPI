@@ -1,4 +1,5 @@
 export * from './findPatientsRepository'
+export * from './findUniquePatientRepository'
 export * from './createPatientRepository'
 export * from './deletePatientRepository'
 export * from './updatePatientRepository'

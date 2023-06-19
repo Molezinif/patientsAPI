@@ -5,16 +5,11 @@ export class FindPatientsController implements Controller {
   constructor(private readonly findPatients: FindPatientsInterface) {}
 
   async handle(request: FindPatientsController.Request) {
-    const { id } = request
-    const patients = await this.findPatients.findMany({
-      id: id ? Number(id) : undefined,
-    })
+    const patients = await this.findPatients.findMany({})
     return { statusCode: 200, body: patients }
   }
 }
 
 export namespace FindPatientsController {
-  export type Request = {
-    id?: string
-  }
+  export type Request = {}
 }

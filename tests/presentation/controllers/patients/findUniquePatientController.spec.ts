@@ -13,7 +13,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-describe('CreatePatientController', () => {
+describe('FindUniquePatientController', () => {
   test('should return 404 if patient no exist', async () => {
     const { sut } = makeSut()
 

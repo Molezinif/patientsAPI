@@ -26,7 +26,7 @@ export class PatientPrismaRepository
 
     const problems = await prisma.problem.findMany()
 
-    const patientProblems = patientProblemTable.map((patient) => {
+    const patientProblems = patientProblemTable?.map((patient) => {
       const patientProblemId = patient.patientProblems.map(
         (patientProblemTable) => patientProblemTable.problemId
       )
@@ -40,7 +40,7 @@ export class PatientPrismaRepository
       }
     })
 
-    const patientWithProblem = patient.map((patient, index) => {
+    const patientWithProblem = patient?.map((patient, index) => {
       return {
         ...patient,
         problems: patientProblems[index].problem,

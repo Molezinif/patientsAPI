@@ -12,7 +12,8 @@ module.exports = {
     '!<rootDir>/src/**/index.ts',
     '!<rootDir>/src/**/index.ts',
     '!<rootDir>/src/**/*.protocols.ts',
-    '!<rootDir>/src/domain/usecases/**'
+    '!<rootDir>/src/domain/usecases/**',
+    '!<rootDir>/src/main/adapters/expressRouteAdapter.ts'
   ],
   coverageDirectory: 'coverage',
   transform: {

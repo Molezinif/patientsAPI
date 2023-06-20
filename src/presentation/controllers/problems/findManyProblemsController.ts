@@ -4,17 +4,24 @@ import { Controller } from '@/presentation/protocols'
 export class FindProblemsController implements Controller {
   constructor(private readonly findProblems: FindProblemsInterface) {}
 
-  async handle(request: FindProblemsController.Request) {
-    const { id } = request
-    const problems = await this.findProblems.findMany({
-      id: id ? Number(id) : undefined,
-    })
+  async handle() {
+    const problems = await this.findProblems.findMany()
+
+    if (!problems.body) {
+      return {
+        statusCode: 400,
+        body: [
+          {
+            message: 'Problem(s) not found',
+          },
+        ],
+      }
+    }
+
     return { statusCode: 200, body: problems }
   }
 }
 
 export namespace FindProblemsController {
-  export type Request = {
-    id?: string
-  }
+  export type Request = {}
 }

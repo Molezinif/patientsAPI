@@ -8,21 +8,7 @@ import prisma from '@/infra/db/prisma/helpers/client'
 export class ProblemPrismaRepository
   implements FindProblemsRepository, AddProblemRepository
 {
-  async findMany(
-    params: FindProblemsInterface.Params
-  ): Promise<FindProblemsInterface.Result> {
-    if (params.id) {
-      const result = await prisma.problem.findUnique({
-        where: {
-          id: params.id,
-        },
-      })
-      return {
-        statusCode: 200,
-        body: result,
-      }
-    }
-
+  async findMany(): Promise<FindProblemsInterface.Result> {
     const result = await prisma.problem.findMany()
 
     return {

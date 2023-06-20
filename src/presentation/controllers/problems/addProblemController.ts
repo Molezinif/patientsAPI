@@ -10,7 +10,7 @@ export class AddProblemsController implements Controller {
       code,
       description,
     })
-    return { statusCode: 200, body: problems }
+    return { statusCode: problems.statusCode, body: problems.body }
   }
 }
 

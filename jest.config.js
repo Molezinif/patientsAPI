@@ -21,5 +21,6 @@ module.exports = {
         isolatedModules: true
       }
     ]
-  }
+  },
+  setupFilesAfterEnv: ['<rootDir>/tests/infra/db/prisma/singleton.ts']
 }

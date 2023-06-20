@@ -14,7 +14,7 @@ const makeSut = (): SutTypes => {
 }
 
 describe('CreatePatientController', () => {
-  it('should return 400 if no name is provided', async () => {
+  test('should return 400 if no name is provided', async () => {
     const { sut } = makeSut()
 
     const httpRequest = {
@@ -28,6 +28,57 @@ describe('CreatePatientController', () => {
     await expect(sut.handle(httpRequest)).resolves.toEqual({
       statusCode: 400,
       body: 'Missing param: name, email or medicalRecord',
+    })
+  })
+
+  test('should return 400 if no email is provided', async () => {
+    const { sut } = makeSut()
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: '',
+        medicalRecord: '123456',
+      },
+    }
+
+    await expect(sut.handle(httpRequest)).resolves.toEqual({
+      statusCode: 400,
+      body: 'Missing param: name, email or medicalRecord',
+    })
+  })
+
+  test('should return 400 if no medicalRecord is provided', async () => {
+    const { sut } = makeSut()
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email',
+        medicalRecord: '',
+      },
+    }
+
+    await expect(sut.handle(httpRequest)).resolves.toEqual({
+      statusCode: 400,
+      body: 'Missing param: name, email or medicalRecord',
+    })
+  })
+
+  test('should return 201 if valid data is provided', async () => {
+    const { sut } = makeSut()
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email',
+        medicalRecord: '123456',
+      },
+    }
+
+    await expect(sut.handle(httpRequest)).resolves.toEqual({
+      statusCode: 201,
+      body: undefined,
     })
   })
 })

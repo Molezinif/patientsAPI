@@ -129,6 +129,23 @@ export class PatientPrismaRepository
       }
     }
 
+    if (patientProblems && patientProblems.length > 0) {
+      for (const problem of patientProblems) {
+        const hasProblem = await prisma.problem.findMany({
+          where: {
+            id: problem.problemId,
+          },
+        })
+
+        if (hasProblem.length === 0) {
+          return {
+            statusCode: 400,
+            body: 'Problem does not exist',
+          }
+        }
+      }
+    }
+
     const patient = await prisma.patient.create({
       data: {
         name,
@@ -138,7 +155,7 @@ export class PatientPrismaRepository
       },
     })
 
-    if (patientProblems) {
+    if (patientProblems && patientProblems.length > 0) {
       for (const problem of patientProblems) {
         await prisma.patientProblem.create({
           data: {
@@ -195,13 +212,18 @@ export class PatientPrismaRepository
       where: { id: Number(id) },
     })
 
-    const patientProblemDoesNotExist = await prisma.patientProblem.findMany({
+    const hasPatientProblem = await prisma.patientProblem.findMany({
       where: {
         patientId: Number(id),
       },
     })
 
-    if (patientProblemDoesNotExist && patientProblems) {
+    if (
+      hasPatientProblem &&
+      hasPatientProblem.length > 0 &&
+      patientProblems &&
+      patientProblems.length > 0
+    ) {
       for (const problem of patientProblems) {
         await prisma.patientProblem.create({
           data: {
@@ -213,7 +235,6 @@ export class PatientPrismaRepository
     }
 
     if (!patientExists) {
-      console.log('Patient not found')
       return {
         statusCode: 404,
         body: {

@@ -2,11 +2,11 @@ import { IPatient } from './patient'
 import { IProblem } from './problems'
 
 export interface IPatientProblems {
-  id: number
-  patient: IPatient
+  id?: number
+  patient?: IPatient
   patientId: number
-  problem: IProblem
+  problem?: IProblem
   problemId: number
-  createdAt: Date
-  updatedAt: Date
+  createdAt?: Date
+  updatedAt?: Date
 }

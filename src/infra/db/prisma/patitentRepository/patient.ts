@@ -81,19 +81,9 @@ export class PatientPrismaRepository
     const patientWithProblem = {
       ...patient,
       problems: problems,
-    } as FindPatientUniqueRepository.Params
+    } as FindPatientUniqueRepository.Result
 
-    if (!patient) {
-      return {
-        statusCode: 404,
-        body: 'Patient not found',
-      }
-    }
-
-    return {
-      statusCode: 200,
-      body: patientWithProblem,
-    }
+    return patient ? patientWithProblem : null
   }
 
   async create(

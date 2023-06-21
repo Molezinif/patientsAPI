@@ -1,2 +1,2 @@
-export * from './findManyPatientsRepositoryControllerFactory'
-export * from './findUniquePatientsRepositoryControllerFactory'
+export * from './findMany'
+export * from './findUnique'

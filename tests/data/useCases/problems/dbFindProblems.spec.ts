@@ -3,9 +3,7 @@ import { FindProblemsInterface } from '@/domain/usecases'
 
 const makeFindProblemsRepository = (): FindProblemsInterface => {
   class FindProblemsRepositoryStub implements FindProblemsInterface {
-    async findMany(
-      params: FindProblemsInterface.Params
-    ): Promise<FindProblemsInterface.Result> {
+    async findMany(): Promise<FindProblemsInterface.Result> {
       return {
         statusCode: 200,
         body: [
@@ -48,7 +46,7 @@ describe('DbFindProblems', () => {
   test('Should call dbFindProblems with correct values', async () => {
     const { sut, findProblemsRepositoryStub } = makeSut()
     const findManySpy = jest.spyOn(findProblemsRepositoryStub, 'findMany')
-    await sut.findMany({})
-    expect(findManySpy).toHaveBeenCalledWith({})
+    await sut.findMany()
+    expect(findManySpy).toHaveBeenCalledWith()
   })
 })

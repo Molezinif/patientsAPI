@@ -3,9 +3,7 @@ import { FindPatientsInterface } from '@/domain/usecases'
 
 const makeFindPatientsRepository = (): FindPatientsInterface => {
   class FindPatientRepositoryStub implements FindPatientsInterface {
-    async findMany(
-      params: FindPatientsInterface.Params
-    ): Promise<FindPatientsInterface.Result> {
+    async findMany(): Promise<FindPatientsInterface.Result> {
       return {
         statusCode: 200,
         body: [
@@ -58,7 +56,7 @@ describe('DbFindPatients', () => {
   test('Should call dbFindManyPatients with correct values', async () => {
     const { sut, patientRepositoryStub } = makeSut()
     const findManySpy = jest.spyOn(patientRepositoryStub, 'findMany')
-    await sut.findMany({})
-    expect(findManySpy).toHaveBeenCalledWith({})
+    await sut.findMany()
+    expect(findManySpy).toHaveBeenCalledWith()
   })
 })

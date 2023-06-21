@@ -37,19 +37,9 @@ export class ProblemPrismaRepository
     })
 
     if (!result) {
-      return {
-        statusCode: 400,
-        body: [
-          {
-            message: 'Problem not created',
-          },
-        ],
-      }
+      return null
     }
 
-    return {
-      statusCode: 201,
-      body: result,
-    }
+    return result
   }
 }

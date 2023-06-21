@@ -1,16 +1,41 @@
 import { AddProblemInterface } from '@/domain/usecases'
-import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
+import {
+  serverError,
+  success,
+  unprocessableEntity,
+} from '@/presentation/helpers'
+import {
+  Controller,
+  HttpRequest,
+  HttpResponse,
+  InputValidation,
+} from '@/presentation/protocols'
 
 export class AddProblemsController implements Controller {
-  constructor(private readonly findProblems: AddProblemInterface) {}
+  constructor(
+    private readonly validation: InputValidation,
+    private readonly findProblems: AddProblemInterface
+  ) {}
 
   async handle(request: AddProblemsController.Request): Promise<HttpResponse> {
-    const { code, description } = request.body
-    const problems = await this.findProblems.add({
-      code,
-      description,
-    })
-    return { statusCode: problems.statusCode, body: problems.body }
+    try {
+      const { code, description } = request.body
+
+      const error = this.validation.validate(request.body)
+
+      if (error) {
+        return unprocessableEntity(error)
+      }
+
+      const problem = await this.findProblems.add({
+        code,
+        description,
+      })
+
+      return success(problem)
+    } catch (error) {
+      return serverError(error)
+    }
   }
 }
 

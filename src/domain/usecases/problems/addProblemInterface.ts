@@ -1,11 +1,14 @@
-import { HttpResponse } from "@/presentation/protocols"
+interface AddProblem {
+  code: string
+  description: string
+}
 
 export namespace AddProblemInterface {
   export type Params = {
     code: string
     description: string
   }
-  export type Result = HttpResponse
+  export type Result = AddProblem | null
 }
 
 export interface AddProblemInterface {

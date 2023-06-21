@@ -1,13 +1,18 @@
 import { FindProblemsInterface } from '@/domain/usecases'
+import { serverError, success } from '@/presentation/helpers'
 import { Controller } from '@/presentation/protocols'
 
 export class FindProblemsController implements Controller {
   constructor(private readonly findProblems: FindProblemsInterface) {}
 
   async handle() {
-    const problems = await this.findProblems.findMany()
+    try {
+      const problems = await this.findProblems.findMany()
 
-    return { statusCode: problems.statusCode, body: problems.body }
+      return success(problems)
+    } catch (error) {
+      return serverError(error)
+    }
   }
 }
 

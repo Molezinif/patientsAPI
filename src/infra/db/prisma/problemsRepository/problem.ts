@@ -12,18 +12,10 @@ export class ProblemPrismaRepository
     const result = await prisma.problem.findMany()
 
     if (!result) {
-      return {
-        statusCode: 400,
-        body: {
-          message: 'Problems not found',
-        },
-      }
+      return []
     }
 
-    return {
-      statusCode: 200,
-      body: result,
-    }
+    return result
   }
 
   async add(

@@ -7,18 +7,7 @@ export class FindProblemsController implements Controller {
   async handle() {
     const problems = await this.findProblems.findMany()
 
-    if (!problems.body) {
-      return {
-        statusCode: 400,
-        body: [
-          {
-            message: 'Problem(s) not found',
-          },
-        ],
-      }
-    }
-
-    return { statusCode: 200, body: problems }
+    return { statusCode: problems.statusCode, body: problems.body }
   }
 }
 

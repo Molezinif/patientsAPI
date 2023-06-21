@@ -25,10 +25,8 @@ describe('AddProblemController', () => {
     const result = await sut.handle()
 
     expect(result.statusCode).toBe(400)
-    expect(result.body).toEqual([
-      {
-        message: 'Problem(s) not found',
-      },
-    ])
+    expect(result.body).toEqual({
+      message: 'Problems not found',
+    })
   })
 })

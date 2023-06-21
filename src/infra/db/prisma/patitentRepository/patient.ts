@@ -149,10 +149,7 @@ export class PatientPrismaRepository
     })
 
     if (!patientExists) {
-      return {
-        statusCode: 400,
-        body: 'Patient does not exist',
-      }
+      return false
     }
 
     await prisma.patientProblem.deleteMany({
@@ -163,12 +160,7 @@ export class PatientPrismaRepository
       where: { id: Number(params.id) },
     })
 
-    return {
-      statusCode: 200,
-      body: {
-        message: 'Patient deleted successfully',
-      },
-    }
+    return true
   }
 
   async update(

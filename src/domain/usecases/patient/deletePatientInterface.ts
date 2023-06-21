@@ -4,7 +4,7 @@ export namespace DeletePatientInterface {
   export type Params = {
     id: number
   }
-  export type Result = HttpResponse
+  export type Result = boolean
 }
 
 export interface DeletePatientInterface {

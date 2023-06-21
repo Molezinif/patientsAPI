@@ -47,7 +47,7 @@ export class PatientPrismaRepository
       }
     })
 
-    return result ? result : null
+    return result
   }
 
   async findUnique(

@@ -11,7 +11,7 @@ interface PatientWithProblems {
 }
 
 export namespace FindPatientsInterface {
-  export type Result = PatientWithProblems[] | null
+  export type Result = PatientWithProblems[] | []
 }
 
 export interface FindPatientsInterface {

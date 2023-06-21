@@ -69,24 +69,21 @@ describe('PatientPrismaRepository: createPatient', () => {
     })
 
     expect(result).toEqual({
-      body: {
-        email: 'example@email.com',
-        id: 1,
-        medicalRecord: '1',
-        name: 'Gabriel',
-        patientProblems: [
-          {
-            createdAt: expect.any(Date),
-            id: 1,
-            patientId: 1,
-            problemId: 2054,
-            updatedAt: expect.any(Date),
-          },
-        ],
-        updatedAt: expect.any(Date),
-        createdAt: expect.any(Date),
-      },
-      statusCode: 201,
+      email: 'example@email.com',
+      id: 1,
+      medicalRecord: '1',
+      name: 'Gabriel',
+      patientProblems: [
+        {
+          createdAt: expect.any(Date),
+          id: 1,
+          patientId: 1,
+          problemId: 2054,
+          updatedAt: expect.any(Date),
+        },
+      ],
+      updatedAt: expect.any(Date),
+      createdAt: expect.any(Date),
     })
   })
 
@@ -138,10 +135,7 @@ describe('PatientPrismaRepository: createPatient', () => {
       },
     })
 
-    expect(result).toEqual({
-      body: 'Problem does not exist',
-      statusCode: 400,
-    })
+    expect(result).toEqual(null)
   })
 
   test('should throw message: email already exists', async () => {
@@ -171,26 +165,23 @@ describe('PatientPrismaRepository: createPatient', () => {
     })
 
     expect(result).toEqual({
-      body: 'Email already exists',
-      statusCode: 400,
+      error: 'Email already exists',
     })
   })
 
-  test('should throw message: Missing param: name, email or medicalRecord', async () => {
+  test('should return null if', async () => {
     const { sut } = makeSut()
 
     const result = await sut.create({
       body: {
         name: 'Gabriel',
-        email: '',
+        // @ts-expect-error
+        email: undefined,
         medicalRecord: '1',
       },
     })
 
-    expect(result).toEqual({
-      body: 'Missing param: name, email or medicalRecord',
-      statusCode: 400,
-    })
+    expect(result).toEqual(null)
   })
 })
 
@@ -240,47 +231,44 @@ describe('PatientPrismaRepository: findMany', () => {
 
     const result = await sut.findMany()
 
-    expect(result).toEqual({
-      body: [
-        {
-          createdAt: expect.any(Date),
-          email: 'example1@email.com',
-          id: 1,
-          medicalRecord: '1',
-          name: 'Gabriel',
-          patientProblems: [],
-          problems: [],
-          updatedAt: expect.any(Date),
-        },
-        {
-          createdAt: expect.any(Date),
-          email: 'example2@email.com',
-          id: 1,
-          medicalRecord: '2',
-          name: 'Shrek',
-          patientProblems: [
-            {
-              createdAt: expect.any(Date),
-              id: 1,
-              patientId: 1,
-              problemId: 1,
-              updatedAt: expect.any(Date),
-            },
-          ],
-          problems: [
-            {
-              code: 'A01',
-              createdAt: expect.any(Date),
-              description: 'Dor de cabeça',
-              id: 1,
-              updatedAt: expect.any(Date),
-            },
-          ],
-          updatedAt: expect.any(Date),
-        },
-      ],
-      statusCode: 200,
-    })
+    expect(result).toEqual([
+      {
+        createdAt: expect.any(Date),
+        email: 'example1@email.com',
+        id: 1,
+        medicalRecord: '1',
+        name: 'Gabriel',
+        patientProblems: [],
+        problems: [],
+        updatedAt: expect.any(Date),
+      },
+      {
+        createdAt: expect.any(Date),
+        email: 'example2@email.com',
+        id: 1,
+        medicalRecord: '2',
+        name: 'Shrek',
+        patientProblems: [
+          {
+            createdAt: expect.any(Date),
+            id: 1,
+            patientId: 1,
+            problemId: 1,
+            updatedAt: expect.any(Date),
+          },
+        ],
+        problems: [
+          {
+            code: 'A01',
+            createdAt: expect.any(Date),
+            description: 'Dor de cabeça',
+            id: 1,
+            updatedAt: expect.any(Date),
+          },
+        ],
+        updatedAt: expect.any(Date),
+      },
+    ])
   })
   test('should return an empty array if has no patients ', async () => {
     const { sut } = makeSut()
@@ -300,10 +288,7 @@ describe('PatientPrismaRepository: findMany', () => {
 
     const result = await sut.findMany()
 
-    expect(result).toEqual({
-      body: [],
-      statusCode: 200,
-    })
+    expect(result).toEqual([])
   })
 })
 
@@ -334,24 +319,21 @@ describe('PatientPrismaRepository: findUnique', () => {
     })
 
     expect(result).toEqual({
-      body: {
-        id: 1,
-        email: 'example@email.com',
-        name: 'Gabriel',
-        medicalRecord: '1',
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
-        patientProblems: [
-          {
-            id: 1,
-            patientId: 1,
-            problemId: 1,
-            createdAt: expect.any(Date),
-            updatedAt: expect.any(Date),
-          },
-        ],
-      },
-      statusCode: 200,
+      id: 1,
+      email: 'example@email.com',
+      name: 'Gabriel',
+      medicalRecord: '1',
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+      patientProblems: [
+        {
+          id: 1,
+          patientId: 1,
+          problemId: 1,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ],
     })
   })
 
@@ -365,10 +347,7 @@ describe('PatientPrismaRepository: findUnique', () => {
       id: 1,
     })
 
-    expect(result).toEqual({
-      body: 'Patient not found',
-      statusCode: 404,
-    })
+    expect(result).toEqual(null)
   })
 })
 
@@ -440,24 +419,21 @@ describe('PatientPrismaRepository: update', () => {
     })
 
     expect(result).toEqual({
-      body: {
-        id: 1,
-        name: 'Gabriel',
-        medicalRecord: '1',
-        email: 'emailchanged@email.com',
-        patientProblems: [
-          {
-            id: 1,
-            patientId: 1,
-            problemId: 2,
-            createdAt: expect.any(Date),
-            updatedAt: expect.any(Date),
-          },
-        ],
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
-      },
-      statusCode: 200,
+      id: 1,
+      name: 'Gabriel',
+      medicalRecord: '1',
+      email: 'emailchanged@email.com',
+      patientProblems: [
+        {
+          id: 1,
+          patientId: 1,
+          problemId: 2,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        },
+      ],
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
     })
   })
   test('should throw message: Patient not found', async () => {
@@ -480,12 +456,7 @@ describe('PatientPrismaRepository: update', () => {
       },
     })
 
-    expect(result).toEqual({
-      body: {
-        message: 'Patient not found',
-      },
-      statusCode: 404,
-    })
+    expect(result).toEqual(null)
   })
 })
 
@@ -513,12 +484,7 @@ describe('PatientPrismaRepository: deletePatient', () => {
       id: 1,
     })
 
-    expect(result).toEqual({
-      body: {
-        message: 'Patient deleted successfully',
-      },
-      statusCode: 200,
-    })
+    expect(result).toEqual(true)
   })
 
   test('should throw message: Patient not found', async () => {
@@ -530,9 +496,6 @@ describe('PatientPrismaRepository: deletePatient', () => {
       id: 1,
     })
 
-    expect(result).toEqual({
-      body: 'Patient does not exist',
-      statusCode: 400,
-    })
+    expect(result).toEqual(false)
   })
 })

@@ -1,4 +1,5 @@
 import { makeCreatePatientsRepository } from '@/main/factories/patients/create/createPatientUseCaseFactory'
+import { makeCreatePatientValidation } from '@/main/factories/patients/create/createPatientValidator'
 import { CreatePatientController } from '@/presentation/controllers'
 
 interface SutTypes {
@@ -6,7 +7,10 @@ interface SutTypes {
 }
 
 const makeSut = (): SutTypes => {
-  const sut = new CreatePatientController(makeCreatePatientsRepository())
+  const sut = new CreatePatientController(
+    makeCreatePatientValidation(),
+    makeCreatePatientsRepository()
+  )
 
   return {
     sut,

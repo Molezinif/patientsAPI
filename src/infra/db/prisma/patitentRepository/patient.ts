@@ -91,24 +91,6 @@ export class PatientPrismaRepository
   ): Promise<CreatePatientRepository.Result> {
     const { name, email, medicalRecord, patientProblems } = request.body
 
-    const emailExists = await prisma.patient.findUnique({
-      where: { email },
-    })
-
-    if (emailExists) {
-      return {
-        statusCode: 400,
-        body: 'Email already exists',
-      }
-    }
-
-    if (!name || !email || !medicalRecord) {
-      return {
-        statusCode: 400,
-        body: 'Missing param: name, email or medicalRecord',
-      }
-    }
-
     if (patientProblems && patientProblems.length > 0) {
       for (const problem of patientProblems) {
         const hasProblem = await prisma.problem.findMany({
@@ -118,12 +100,31 @@ export class PatientPrismaRepository
         })
 
         if (hasProblem.length === 0) {
-          return {
-            statusCode: 400,
-            body: 'Problem does not exist',
-          }
+          return null
         }
       }
+
+      const patient = await prisma.patient.create({
+        data: {
+          name,
+          email,
+          medicalRecord,
+          createdAt: new Date(),
+        },
+      })
+
+      if (patientProblems && patientProblems.length > 0) {
+        for (const problem of patientProblems) {
+          await prisma.patientProblem.create({
+            data: {
+              patientId: patient.id,
+              problemId: problem.problemId,
+            },
+          })
+        }
+      }
+
+      return patient
     }
 
     const patient = await prisma.patient.create({
@@ -135,21 +136,9 @@ export class PatientPrismaRepository
       },
     })
 
-    if (patientProblems && patientProblems.length > 0) {
-      for (const problem of patientProblems) {
-        await prisma.patientProblem.create({
-          data: {
-            patientId: patient.id,
-            problemId: problem.problemId,
-          },
-        })
-      }
-    }
+    console.log(patient)
 
-    return {
-      statusCode: 201,
-      body: patient,
-    }
+    return patient ? patient : null
   }
 
   async delete(

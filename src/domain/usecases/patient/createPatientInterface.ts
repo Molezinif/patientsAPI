@@ -1,6 +1,10 @@
 import { IPatientProblems } from '@/domain/models'
 import { HttpResponse } from '@/presentation/protocols'
 
+interface CreatePatient {
+  id: number
+  name: string
+}
 export namespace CreatePatientInterface {
   export type Params = {
     body: {
@@ -10,7 +14,7 @@ export namespace CreatePatientInterface {
       patientProblems?: IPatientProblems[]
     }
   }
-  export type Result = HttpResponse
+  export type Result = CreatePatient | null
 }
 
 export interface CreatePatientInterface {

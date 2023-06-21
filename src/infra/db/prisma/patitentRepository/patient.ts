@@ -40,24 +40,14 @@ export class PatientPrismaRepository
       }
     })
 
-    const patientWithProblem = patient?.map((patient, index) => {
+    const result = patient?.map((patient, index) => {
       return {
         ...patient,
         problems: patientProblems[index].problem,
       }
     })
 
-    if (!patientWithProblem || patientWithProblem.length === 0) {
-      return {
-        statusCode: 200,
-        body: [],
-      }
-    }
-
-    return {
-      statusCode: 200,
-      body: patientWithProblem,
-    }
+    return result ? result : null
   }
 
   async findUnique(

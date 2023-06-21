@@ -1,25 +1,56 @@
-import { IPatientProblems } from '@/domain/models'
 import { UpdatePatientInterface } from '@/domain/usecases'
-import { Controller, HttpRequest } from '@/presentation/protocols'
+import { NotFoundError } from '@/presentation/errors'
+import {
+  notFound,
+  serverError,
+  success,
+  unprocessableEntity,
+} from '@/presentation/helpers'
+import {
+  Controller,
+  HttpRequest,
+  InputValidation,
+} from '@/presentation/protocols'
 
 export class UpdatePatientController implements Controller {
-  constructor(private readonly UpdatePatient: UpdatePatientInterface) {}
+  constructor(
+    private readonly validation: InputValidation,
+    private readonly UpdatePatient: UpdatePatientInterface
+  ) {}
 
   async handle(request: UpdatePatientController.Request) {
-    const { name, email, patientProblems } = request.body
-    const { id } = request.params
+    try {
+      const { name, email, patientProblems } = request.body
+      const { id } = request.params
 
-    const patient = await this.UpdatePatient.update({
-      body: {
-        name,
-        email,
-        patientProblems,
-      },
-      params: {
-        id: Number(id),
-      },
-    })
-    return { statusCode: patient.statusCode, body: patient.body }
+      const error = this.validation.validate({
+        ...request.params,
+        ...request.body,
+      })
+
+      if (error) {
+        return unprocessableEntity(error)
+      }
+
+      const patient = await this.UpdatePatient.update({
+        body: {
+          name,
+          email,
+          patientProblems,
+        },
+        params: {
+          id: Number(id),
+        },
+      })
+
+      if (!patient) {
+        return notFound(new NotFoundError('Patient'))
+      }
+
+      return success(patient)
+    } catch (error) {
+      return serverError(error)
+    }
   }
 }
 

@@ -196,12 +196,7 @@ export class PatientPrismaRepository
     }
 
     if (!patientExists) {
-      return {
-        statusCode: 404,
-        body: {
-          message: 'Patient not found',
-        },
-      }
+      return null
     }
 
     const patient = await prisma.patient.update({
@@ -213,9 +208,6 @@ export class PatientPrismaRepository
         email,
       },
     })
-    return {
-      statusCode: 200,
-      body: patient,
-    }
+    return patient
   }
 }

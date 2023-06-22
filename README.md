@@ -26,7 +26,7 @@ This project aims to develop a basic API using Node.js, Express.js and Prisma, t
 npm i
 ```
 
-2. Migrate
+2. Migrate obs:(you should have .env file with the database url)
 
 ```shell
 npm run migrate

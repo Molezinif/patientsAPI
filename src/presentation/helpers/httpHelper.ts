@@ -55,7 +55,6 @@ export const failedDependency = (
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const serverError = (error: any): HttpResponse => {
   // eslint-disable-next-line no-console
-  console.log(error)
 
   if (error?.code === 'P2003') {
     const field: string = error.meta?.field_name

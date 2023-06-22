@@ -136,8 +136,6 @@ export class PatientPrismaRepository
       },
     })
 
-    console.log(patient)
-
     return patient ? patient : null
   }
 

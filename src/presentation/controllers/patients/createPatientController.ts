@@ -40,7 +40,7 @@ export class CreatePatientController implements Controller {
       })
 
       if (!patient) {
-        return notFound(new NotFoundError('Patient or problem'))
+        return notFound(new NotFoundError('Problem'))
       }
 
       return success(patient)

@@ -29,17 +29,14 @@ describe('ProblemPrismaRepository: add', () => {
     })
 
     expect(problem).toEqual({
-      body: {
-        id: 1,
-        code: 'code',
-        description: 'description',
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
-      },
-      statusCode: 201,
+      code: 'code',
+      createdAt: expect.any(Date),
+      description: 'description',
+      id: 1,
+      updatedAt: expect.any(Date),
     })
   })
-  test('should return 400 if problem not created', async () => {
+  test('should return null if problem not created', async () => {
     const { sut } = makeSut()
 
     // @ts-expect-error
@@ -50,14 +47,7 @@ describe('ProblemPrismaRepository: add', () => {
       description: 'description',
     })
 
-    expect(problem).toEqual({
-      body: [
-        {
-          message: 'Problem not created',
-        },
-      ],
-      statusCode: 400,
-    })
+    expect(problem).toEqual(null)
   })
 })
 
@@ -78,17 +68,24 @@ describe('ProblemPrismaRepository: findMany', () => {
 
     const problems = await sut.findMany()
 
-    expect(problems).toEqual({
-      body: [
-        {
-          id: 1,
-          code: 'code',
-          description: 'description',
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        },
-      ],
-      statusCode: 200,
-    })
+    expect(problems).toEqual([
+      {
+        code: 'code',
+        createdAt: expect.any(Date),
+        description: 'description',
+        id: 1,
+        updatedAt: expect.any(Date),
+      },
+    ])
+  })
+  test('should return a empty array if problems not found', async () => {
+    const { sut } = makeSut()
+
+    // @ts-expect-error
+    prismaMock.problem.findMany.mockResolvedValue(null)
+
+    const problems = await sut.findMany()
+
+    expect(problems).toEqual([])
   })
 })

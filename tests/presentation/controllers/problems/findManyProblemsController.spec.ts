@@ -1,20 +1,18 @@
-import { makeCreatePatientsRepository } from '@/main/factories/patients/create/createPatientUseCaseFactory'
-import { makeAddProblemControllerFactory } from '@/main/factories/problems/create/addProblemUseCaseFactory'
-import { makeFindProblemsRepository } from '@/main/factories/problems/read/findProblemsUseCaseFactory'
-import {
-  AddProblemsController,
-  FindProblemsController,
-} from '@/presentation/controllers'
+import { FindProblemsController } from '@/presentation/controllers'
+import { FindProblemsSpy, mockProblems } from '@/../tests/mocks'
 
 interface SutTypes {
   sut: FindProblemsController
+  findProblemSpy: FindProblemsSpy
 }
 
 const makeSut = (): SutTypes => {
-  const sut = new FindProblemsController(makeFindProblemsRepository())
+  const findProblemSpy = new FindProblemsSpy()
+  const sut = new FindProblemsController(findProblemSpy)
 
   return {
     sut,
+    findProblemSpy,
   }
 }
 
@@ -24,9 +22,19 @@ describe('AddProblemController', () => {
 
     const result = await sut.handle()
 
-    expect(result.statusCode).toBe(400)
-    expect(result.body).toEqual({
-      message: 'Problems not found',
+    expect(result.statusCode).toBe(200)
+    expect(result.body).toEqual(mockProblems)
+  })
+  test('should throw serverError', async () => {
+    const { sut, findProblemSpy } = makeSut()
+    jest.spyOn(findProblemSpy, 'findMany').mockImplementationOnce(async () => {
+      return new Promise((resolve, reject) => {
+        reject(new Error())
+      })
     })
+
+    const result = await sut.handle()
+
+    expect(result.statusCode).toBe(500)
   })
 })

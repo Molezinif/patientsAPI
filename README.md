@@ -23,10 +23,16 @@ This project aims to develop a basic API using Node.js, Express.js and Prisma, t
 1. Install the dependencies
 
 ```shell
-npm install
+npm i
 ```
 
-2. Start server
+2. Migrate
+
+```shell
+npm run migrate
+```
+
+3. Start server
 
 ```shell
 npm run dev

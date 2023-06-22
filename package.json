@@ -10,6 +10,7 @@
     "dev": "tsx watch src/main/server.ts",
     "test:coverage": "jest --coverage  --watchAll",
     "seed": "ts-node prisma/seeders/seed.ts",
+    "migrate": "dotenv -e .env.local npx prisma migrate dev",
     "clearJest": "jest --clearCache"
   },
   "keywords": [],

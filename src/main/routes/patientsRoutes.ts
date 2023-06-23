@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client'
 import { Router } from 'express'
 import { adaptRoute } from '@/main/adapters'
 import {
@@ -8,8 +7,6 @@ import {
   makeUpdatePatientController,
   makeFindUniquePatientController,
 } from '@/main/factories'
-
-const prisma = new PrismaClient()
 
 export default (router: Router): void => {
   router.get('/patients', adaptRoute(makeFindPatientsController()))

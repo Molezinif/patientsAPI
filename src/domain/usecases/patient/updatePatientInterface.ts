@@ -1,5 +1,4 @@
-import { IPatientProblems, IProblem } from '@/domain/models'
-import { HttpResponse } from '@/presentation/protocols'
+import { IPatientProblems } from '@/domain/models'
 
 interface UpdatePatient {
   id: number

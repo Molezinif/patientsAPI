@@ -1,5 +1,4 @@
 import { IPatientProblems } from './patientProblems'
-import { IProblem } from './problems'
 
 export interface IPatient {
   id: number

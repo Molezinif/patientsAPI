@@ -1,5 +1,4 @@
 import { IPatientProblems } from '@/domain/models'
-import { HttpResponse } from '@/presentation/protocols'
 
 interface CreatePatient {
   id: number

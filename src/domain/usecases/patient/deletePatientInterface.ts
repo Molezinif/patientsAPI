@@ -1,5 +1,3 @@
-import { HttpResponse } from '@/presentation/protocols'
-
 export namespace DeletePatientInterface {
   export type Params = {
     id: number
